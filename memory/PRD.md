@@ -16,8 +16,10 @@ Build a developer portfolio website with a retro terminal meets modern IDE aesth
 - Contact terminal with sudo easter egg, direct email/LinkedIn links, and hero resume CTA.
 - Added descriptive data-testid attributes across interactive and key informational elements.
 - Updated skill dependencies: JavaScript replaces C++, AI/ML now highlights LLMs, RAGs, Prompt Engineering, and Diffusion & Generative Models, while Tools now includes Docker and Azure.
+- Expanded skills with C, HTML/CSS3, Redis, Maven, Jenkins, and Core Engineering Concepts; refreshed role copy to Software Engineer and added EPMM product context.
+- Replaced project summaries with polished README-style LDM, NLP Summarization, and Context-Aware OpenAI Chatbot details.
+- Added Resend-backed `/api/contact` delivery with server-side credentials, reply-to support, validation, and a real name/email/message form.
 
 ## Prioritized backlog
-- P0: Add a real contact delivery endpoint or email integration.
 - P1: Replace the Google Docs resume link with a hosted PDF download when available.
 - P2: Add scroll-triggered reveal animation and richer project detail pages if desired.
