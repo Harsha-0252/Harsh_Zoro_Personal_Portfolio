@@ -9,7 +9,7 @@ const projects = [
   { name: "text-summarization-tool", icon: "≡", color: "cyan", stack: ["Python", "NLP", "Transformers"], blurb: "A focused NLP tool for turning long-form content into clear, useful summaries.", details: "Built a summarization workflow that preserves key context and produces concise outputs for fast reading and downstream analysis." },
   { name: "openai-chatbot", icon: "✦", color: "amber", stack: ["Python", "OpenAI", "API"], blurb: "Conversational assistant with clean prompt routing and a human-first interface.", details: "Created an interactive chatbot prototype with structured prompts, conversational context, and practical error handling." },
 ];
-const skills = { Languages: ["Java", "Python", "SQL", "C++"], Backend: ["Spring Boot", "REST APIs", "Microservices", "J2EE"], "AI / ML": ["PyTorch", "VAE", "NLP", "OpenAI"], Databases: ["MySQL", "MongoDB", "Distributed DBs"], Tools: ["Git", "Linux", "RPM", "Microsoft Graph"] };
+const skills = { Languages: ["Java", "Python", "SQL", "JavaScript"], Backend: ["Spring Boot", "REST APIs", "Microservices", "J2EE"], "AI / ML": ["LLMs", "RAGs", "Prompt Engineering", "Diffusion & Generative Models"], Databases: ["MySQL", "MongoDB", "Distributed DBs"], Tools: ["Git", "Linux", "Docker", "Azure"] };
 const certs = [
   ["Ivanti", "Software Engineering Internship Certificate", "https://drive.google.com/file/d/1pLUe0OKJNgRsG2h792dB-Tsf5K2CQmBM/view?usp=sharing"],
   ["Google Cloud", "Vertex AI + Generative AI", "https://www.credly.com/badges/e5ab8a83-5150-4cd1-8a28-5a454d0eb702/public_url"],

@@ -15,6 +15,7 @@ Build a developer portfolio website with a retro terminal meets modern IDE aesth
 - About whoami terminal, full Ivanti production experience log, three expandable projects, grouped skills, five certificate links.
 - Contact terminal with sudo easter egg, direct email/LinkedIn links, and hero resume CTA.
 - Added descriptive data-testid attributes across interactive and key informational elements.
+- Updated skill dependencies: JavaScript replaces C++, AI/ML now highlights LLMs, RAGs, Prompt Engineering, and Diffusion & Generative Models, while Tools now includes Docker and Azure.
 
 ## Prioritized backlog
 - P0: Add a real contact delivery endpoint or email integration.
