@@ -19,7 +19,7 @@ Build a developer portfolio website with a retro terminal meets modern IDE aesth
 - Expanded skills with C, HTML/CSS3, Redis, Maven, Jenkins, and Core Engineering Concepts; refreshed role copy to Software Engineer and added EPMM product context.
 - Replaced project summaries with polished README-style LDM, NLP Summarization, and Context-Aware OpenAI Chatbot details.
 - Added Resend-backed `/api/contact` delivery with server-side credentials, reply-to support, validation, and a real name/email/message form.
+- Converted the hero resume action to a one-click Google Docs PDF export with the filename `Harshavardhan-Porika-Resume.pdf`.
 
 ## Prioritized backlog
-- P1: Replace the Google Docs resume link with a hosted PDF download when available.
 - P2: Add scroll-triggered reveal animation and richer project detail pages if desired.
