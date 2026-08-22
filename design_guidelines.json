@@ -1,0 +1,47 @@
+{
+  "app_name": "Harshavardhan Porika - Developer Portfolio",
+  "app_type": "portfolio",
+  "theme": "retro terminal meets modern IDE (dark navy/charcoal default with light-mode toggle)",
+  "typography": {
+    "headings": "JetBrains Mono, monospace",
+    "body": "Inter, sans-serif",
+    "accents": "JetBrains Mono with neon green (#00FF66) and cyan (#00E5FF) highlights"
+  },
+  "colors": {
+    "background_dark": "#0B0F17",
+    "surface_dark": "#131C2D",
+    "border_dark": "#1E293B",
+    "primary_neon": "#00FF66",
+    "secondary_cyan": "#00E5FF",
+    "text_primary": "#E2E8F0",
+    "text_muted": "#94A3B8",
+    "background_light": "#F8FAFC",
+    "surface_light": "#FFFFFF",
+    "border_light": "#E2E8F0",
+    "primary_light": "#059669"
+  },
+  "components": [
+    "BootSequenceIntro",
+    "IDEEditorTabsNav",
+    "HeroSectionWithLiveISTClock",
+    "AboutWhoamiCard",
+    "IvantiChangelogExperience",
+    "ProjectRepositoryCardsWithReadme",
+    "SkillsPackageJsonDependenciesGrid",
+    "CertificationsBadgeRow",
+    "TerminalContactFormWithSudoEasterEgg",
+    "CustomTerminalCursor",
+    "MatrixRainBackground"
+  ],
+  "accessibility": {
+    "contrast_ratio": "Minimum 4.5:1 for normal text, 3:1 for large text",
+    "data_testid": "Included on all interactive and key informational elements"
+  },
+  "UNIVERSAL_GUIDELINES_FOR_MAIN_AGENT": [
+    "Do not use universal transitions (transition: all)",
+    "Every interactive element must have hover and focus states",
+    "All interactive elements must include data-testid attributes",
+    "Ensure high contrast in both dark and light modes",
+    "Keep code modular in /app/frontend/src/components/"
+  ]
+}
