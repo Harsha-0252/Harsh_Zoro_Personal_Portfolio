@@ -26,8 +26,11 @@ Lazy-loaded React Three Fiber 3D particle hero, glitch text, fake system metrics
 - NOT yet verified: bundle chunk size measurement (150KB budget), light mode with all new layers, fresh-load mobile gating of 3D canvas (gate runs at mount; resize after load does not remove it).
 
 ## Backlog (prioritized)
-- P2 — Measure gzipped chunk sizes (budget <150KB additions); visual check of light mode with new layers
+- P2 — Measure gzipped chunk sizes (budget <150KB additions); visual check of light mode with new layers (user flagged washed-out glow under light mode — log-stream/particles render dark-mode styling under white bg)
 - P2 — Gate 3D canvas off on viewport shrink after load (currently mount-time only)
+
+## Reverted Work
+- 2026-08-24 (REVERTED same day): An attempted "premium restraint" redesign pass — amber #F2A93B single accent, #0B1220 bg, Fraunces display font, centered particle-assembly icosahedron hero, lenis smooth scroll, boot sequence removal. User rejected it and asked for full rollback to the green/cyan terminal design. Rollback completed and verified; lenis and Fraunces removed. Do not resurrect this direction without explicit user request.
 
 ## User Personas
 - Recruiter/hiring manager scanning in <2s for "this person actually codes"
