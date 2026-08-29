@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { Github } from "lucide-react";
 import Prism from "prismjs";
 import "prismjs/components/prism-markdown";
 
@@ -28,6 +29,7 @@ export default function ProjectsIDE({ projects }) {
               <div className="editor-meta">
                 <div className="stack">{project.stack.map((t) => <span key={t}>{t}</span>)}</div>
                 <p className="editor-blurb">{project.blurb}</p>
+                {project.repo && <a className="repo-link" data-testid={`ide-repo-link-${active}`} href={project.repo} target="_blank" rel="noreferrer"><Github size={13}/> {project.repo.replace("https://github.com/", "")}</a>}
               </div>
               <div className="code-wrap">
                 <div className="line-numbers" aria-hidden="true">{Array.from({ length: lineCount }, (_, i) => <span key={i}>{i + 1}</span>)}</div>

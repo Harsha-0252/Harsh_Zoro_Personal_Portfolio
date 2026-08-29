@@ -32,6 +32,12 @@ Lazy-loaded React Three Fiber 3D particle hero, glitch text, fake system metrics
 ## Reverted Work
 - 2026-08-24 (REVERTED same day): An attempted "premium restraint" redesign pass — amber #F2A93B single accent, #0B1220 bg, Fraunces display font, centered particle-assembly icosahedron hero, lenis smooth scroll, boot sequence removal. User rejected it and asked for full rollback to the green/cyan terminal design. Rollback completed and verified; lenis and Fraunces removed. Do not resurrect this direction without explicit user request.
 
+## Content/Polish Update (2026-08-29, preview only — NOT pushed/deployed per user)
+- Projects reordered to 5: db-engine (new, Java 21 DB engine README, repo link) → notiflow (new, Spring Boot/RabbitMQ/Redis resilience pipeline, repo link) → latent-diffusion-model → text-summarization-tool → openai-chatbot. Same data shape extended with optional `repo` field; repo link renders in IDE editor meta only when present (old 3 projects have no repo URLs — not invented).
+- GitHub profile https://github.com/Harsha-0252 added to footer (icon link) and Contact direct-links.
+- Hero flicker fix: glitch pseudo animations now run once (`linear 1 both`) then stop; `.cursor-block` hard blink replaced with 1.8s ease-in-out `breathe` pulse.
+- Verified: tree order correct, both READMEs render highlighted with correct repo hrefs, both profile links present, computed styles confirm glitch iteration=1 and cursor animation=breathe.
+
 ## User Personas
 - Recruiter/hiring manager scanning in <2s for "this person actually codes"
 - Technical interviewer digging into projects/experience detail
