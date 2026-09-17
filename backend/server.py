@@ -12,7 +12,8 @@ import asyncio
 import html
 import resend
 from datetime import datetime, timezone
-from openai import OpenAI
+from google import genai
+from google.genai import types as genai_types
 from profile_context import SYSTEM_PROMPT
 
 ROOT_DIR = Path(__file__).parent
@@ -27,10 +28,12 @@ SENDER_EMAIL = os.environ.get('SENDER_EMAIL')
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL')
 resend.api_key = RESEND_API_KEY
 
-GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
-GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.3-70b-versatile')
+# Free Gemini API key from https://aistudio.google.com/app/apikey (no card needed)
+GEMINI_API_KEY = os.environ.get('GEMINI_API_KEY')
+GEMINI_MODEL = os.environ.get('GEMINI_MODEL', 'gemini-2.5-flash')
+GEMINI_FALLBACK_MODEL = 'gemini-3.1-flash-lite'  # stable, no scheduled shutdown
 
-groq_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1") if GROQ_API_KEY else None
+gemini_client = genai.Client(api_key=GEMINI_API_KEY) if GEMINI_API_KEY else None
 
 app = FastAPI()
 api_router = APIRouter(prefix="/api")
@@ -83,34 +86,29 @@ async def send_contact_message(request: ContactRequest):
 
 @api_router.post("/chat")
 async def chat(request: ChatRequest):
-    if groq_client is None:
+    if gemini_client is None:
         raise HTTPException(status_code=503, detail="Chatbot isn't configured yet.")
 
-    messages = [{"role": "system", "content": SYSTEM_PROMPT}]
-    messages += [{"role": m.role, "content": m.content} for m in request.history]
-    messages.append({"role": "user", "content": request.message})
+    # Gemini uses "model" instead of "assistant" for the bot's turns
+    contents = [
+        genai_types.Content(role=("model" if m.role == "assistant" else "user"), parts=[genai_types.Part.from_text(text=m.content)])
+        for m in request.history
+    ]
+    contents.append(genai_types.Content(role="user", parts=[genai_types.Part.from_text(text=request.message)]))
+    config = genai_types.GenerateContentConfig(system_instruction=SYSTEM_PROMPT, max_output_tokens=400, temperature=0.4)
 
     try:
         try:
-            completion = await asyncio.to_thread(
-                groq_client.chat.completions.create,
-                model=GROQ_MODEL,
-                messages=messages,
-                max_tokens=400,
-                temperature=0.4,
+            response = await asyncio.to_thread(
+                gemini_client.models.generate_content, model=GEMINI_MODEL, contents=contents, config=config
             )
         except Exception:
-            # Fallback if the primary model gets renamed/decommissioned by Groq
-            logger.warning(f"Primary model '{GROQ_MODEL}' failed, retrying with fallback model")
-            completion = await asyncio.to_thread(
-                groq_client.chat.completions.create,
-                model="llama-3.1-8b-instant",
-                messages=messages,
-                max_tokens=400,
-                temperature=0.4,
+            # Fallback if the primary model gets renamed/deprecated by Google
+            logger.warning(f"Primary model '{GEMINI_MODEL}' failed, retrying with fallback model")
+            response = await asyncio.to_thread(
+                gemini_client.models.generate_content, model=GEMINI_FALLBACK_MODEL, contents=contents, config=config
             )
-        reply = completion.choices[0].message.content
-        return {"reply": reply}
+        return {"reply": response.text}
     except Exception as exc:
         logger.exception("Chatbot request failed")
         raise HTTPException(status_code=502, detail="Chatbot is unavailable right now — please try again shortly.") from exc
