@@ -18,7 +18,6 @@ from profile_context import SYSTEM_PROMPT
 ROOT_DIR = Path(__file__).parent
 load_dotenv(ROOT_DIR / '.env')
 
-# MongoDB connection
 mongo_url = os.environ['MONGO_URL']
 client = AsyncIOMotorClient(mongo_url)
 db = client[os.environ['DB_NAME']]
@@ -28,20 +27,15 @@ SENDER_EMAIL = os.environ.get('SENDER_EMAIL')
 CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL')
 resend.api_key = RESEND_API_KEY
 
-# Groq (OpenAI-compatible, free tier) client for the portfolio chatbot
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
-# Updated to a stable, active model
-GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama3-8b-8192')
+# Swapped to Groq's active, stable model
+GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.1-8b-instant')
 
 groq_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1") if GROQ_API_KEY else None
 
-# Create the main app without a prefix
 app = FastAPI()
-
-# Create a router with the /api prefix
 api_router = APIRouter(prefix="/api")
 
-# Define Models
 class StatusCheck(BaseModel):
     model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
@@ -91,7 +85,7 @@ async def send_contact_message(request: ContactRequest):
 @api_router.post("/chat")
 async def chat(request: ChatRequest):
     if groq_client is None:
-        raise HTTPException(status_code=503, detail="Chatbot isn't configured yet — GROQ_API_KEY missing.")
+        raise HTTPException(status_code=503, detail="Chatbot isn't configured yet.")
 
     messages = [{"role": "system", "content": SYSTEM_PROMPT}]
     messages += [{"role": m.role, "content": m.content} for m in request.history]

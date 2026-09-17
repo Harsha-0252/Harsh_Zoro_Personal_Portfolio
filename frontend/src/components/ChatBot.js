@@ -60,7 +60,7 @@ export default function ChatBot() {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 10, scale: 0.9 }}
-                        className="absolute right-[4.5rem] bg-[#1E293B] text-[#E2E8F0] border border-[#334155] px-4 py-2.5 rounded-2xl whitespace-nowrap shadow-xl text-sm font-medium flex items-center gap-2 pointer-events-none"
+                        className="absolute right-[5rem] bg-[#1E293B] text-[#E2E8F0] border border-[#334155] px-4 py-2.5 rounded-2xl whitespace-nowrap shadow-xl text-sm font-medium flex items-center gap-2 pointer-events-none"
                     >
                         <Sparkles size={16} className="text-[#00FF66]" />
                         Yoo! I'm Zoro! Want some tea on Harsha? Ask me.
@@ -68,20 +68,28 @@ export default function ChatBot() {
                 )}
             </AnimatePresence>
 
-            <motion.button
-                className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl overflow-hidden transition-all duration-300 border-2 ${open ? 'bg-[#0B0F17] border-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.4)]' : 'border-transparent bg-transparent'}`}
-                data-testid="chatbot-toggle-button"
-                onClick={() => setOpen((v) => !v)}
-                whileHover={{ scale: 1.06 }}
-                whileTap={{ scale: 0.95 }}
-                aria-label={open ? "Close chat" : "Ask Zoro about Harsha"}
-            >
-                {open ? (
-                    <X size={24} className="text-[#00FF66]" />
-                ) : (
-                    <img src={zoroAvatar} alt="" className="w-full h-full object-cover rounded-full" />
+            {/* Avatar Container with Siri-style Outer Glow */}
+            <div className="relative">
+                {/* Outer Glow Pulse (Visible only when closed) */}
+                {!open && (
+                    <div className="absolute -inset-2 rounded-full bg-[#00FF66] opacity-30 blur-xl animate-pulse pointer-events-none z-0" />
                 )}
-            </motion.button>
+
+                <motion.button
+                    className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl overflow-hidden transition-all duration-300 border-2 ${open ? 'bg-[#0B0F17] border-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.4)]' : 'border-transparent bg-[#0B0F17]'}`}
+                    data-testid="chatbot-toggle-button"
+                    onClick={() => setOpen((v) => !v)}
+                    whileHover={{ scale: 1.06 }}
+                    whileTap={{ scale: 0.95 }}
+                    aria-label={open ? "Close chat" : "Ask Zoro about Harsha"}
+                >
+                    {open ? (
+                        <X size={24} className="text-[#00FF66]" />
+                    ) : (
+                        <img src={zoroAvatar} alt="" className="w-full h-full object-cover rounded-full" />
+                    )}
+                </motion.button>
+            </div>
 
             <AnimatePresence>
                 {open && (

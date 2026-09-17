@@ -13,22 +13,18 @@ import { ArrowUpRight, ChevronDown, Download, ExternalLink, Github, Mail, Moon, 
 
 const fadeUp = { hidden: { opacity: 0, y: 26 }, show: (i) => ({ opacity: 1, y: 0, transition: { delay: 0.25 + i * 0.14, duration: 0.65, ease: [0.22, 1, 0.36, 1] } }) };
 
-// --- Parallax Wrapper ---
-const StickySection = ({ children, id, className = "", zIndex }) => (
-    <section
+// Clean scroll transition wrapper
+const AnimatedSection = ({ id, className = "", children }) => (
+    <motion.section
         id={id}
-        className={`section-pad ${className}`}
-        style={{
-          position: "sticky",
-          top: 0,
-          zIndex: zIndex,
-          minHeight: "100vh",
-          backgroundColor: "inherit",
-          boxShadow: "0 -15px 40px rgba(0,0,0,0.4)"
-        }}
+        className={className}
+        initial={{ opacity: 0, y: 60 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
     >
       {children}
-    </section>
+    </motion.section>
 );
 
 const roles = ["Software Engineer", "Java & Spring Boot Developer", "AI/ML Enthusiast"];
@@ -61,13 +57,20 @@ function App() {
 
   if (!booted) return <div className="boot-screen"><div className="boot-lines"><p><span>root@harsha-dev</span>:~$ ./initialize_portfolio</p><p className="dim">Loading modules... [OK]</p><p className="dim">Mounting experience... [OK]</p><p className="green">Welcome, recruiter.</p><p className="boot-name">Harshavardhan Porika<span className="cursor-block">▋</span></p><p className="dim">Software Engineer</p></div><button className="skip-boot" data-testid="skip-boot-button" onClick={() => setBooted(true)}>skip boot ↵</button></div>;
 
-  return <div className={light ? "app light" : "app"} style={{ position: "relative" }}>
+  return <div className={light ? "app light" : "app"}>
     <ScrollProgress />
-    {matrix && <MatrixRain onClose={() => setMatrix(false)} />}
+
+    {/* High z-index wrapper fixes MatrixRain getting stuck behind sections */}
+    {matrix && (
+        <div className="fixed inset-0 z-[9999]">
+          <MatrixRain onClose={() => setMatrix(false)} />
+        </div>
+    )}
+
     <header className="topbar"><a className="brand" href="#home" data-testid="brand-home"><span className="brand-mark">&gt;_</span><span>harsha<span className="green">.dev</span></span></a><nav className="tabs" aria-label="Main navigation">{[["home","01 / home"],["experience","02 / experience"],["projects","03 / projects"],["skills","04 / skills"],["contact","05 / contact"]].map(([id,label]) => <button key={id} data-testid={`nav-${id}-button`} onClick={() => go(id)}>{label}</button>)}</nav><button className="theme-toggle" data-testid="theme-toggle-button" onClick={() => setLight(!light)} aria-label="Toggle light mode">{light ? <Moon size={16}/> : <Sun size={16}/>}<span>{light ? "dark" : "light"}</span></button></header>
 
     <main>
-      <StickySection id="home" zIndex={10}>
+      <section id="home" className="hero section-pad">
         <div className="hero-glow" aria-hidden="true" />
         <motion.div className="hero-copy" initial="hidden" animate="show">
           <motion.p className="eyebrow" custom={0} variants={fadeUp}><span className="green">$</span> whoami <span className="muted">// available for software engineer roles</span></motion.p>
@@ -88,9 +91,9 @@ function App() {
           </div>
         </motion.div>
         <div className="scroll-cue">scroll to explore <ChevronDown size={14}/></div>
-      </StickySection>
+      </section>
 
-      <StickySection id="about" className="split-section" zIndex={20}>
+      <AnimatedSection id="about" className="section-pad split-section">
         <LogStream />
         <Reveal as="div" className="section-label"><span>01</span><h2>About me</h2></Reveal>
         <Reveal as="div" className="about-grid" delay={0.08}>
@@ -113,9 +116,9 @@ function App() {
             </div>
           </Tilt>
         </Reveal>
-      </StickySection>
+      </AnimatedSection>
 
-      <StickySection id="experience" zIndex={30}>
+      <AnimatedSection id="experience" className="section-pad">
         <LogStream />
         <Reveal as="div" className="section-label"><span>02</span><h2>Experience</h2></Reveal>
         <Tilt className="experience-card glass" max={3} data-testid="experience-card">
@@ -142,14 +145,14 @@ function App() {
             )}
           </Reveal>
         </Tilt>
-      </StickySection>
+      </AnimatedSection>
 
-      <StickySection id="projects" zIndex={40}>
+      <AnimatedSection id="projects" className="section-pad">
         <Reveal as="div" className="section-label"><span>03</span><h2>Selected projects</h2></Reveal>
         <Reveal delay={0.1}><ProjectsIDE projects={projects} /></Reveal>
-      </StickySection>
+      </AnimatedSection>
 
-      <StickySection id="skills" zIndex={50}>
+      <AnimatedSection id="skills" className="section-pad">
         <Reveal as="div" className="section-label"><span>04</span><h2>Skills</h2></Reveal>
         <Reveal as="div" className="skills-grid" stagger>
           {Object.entries(skills).map(([category, items]) =>
@@ -162,9 +165,9 @@ function App() {
               </RevealItem>
           )}
         </Reveal>
-      </StickySection>
+      </AnimatedSection>
 
-      <StickySection zIndex={60}>
+      <AnimatedSection className="section-pad">
         <Reveal as="div" className="section-label"><span>05</span><h2>Certifications</h2></Reveal>
         <Reveal as="div" className="cert-grid" stagger>
           {certs.map(([issuer, name, url], i) =>
@@ -177,9 +180,9 @@ function App() {
               </RevealItem>
           )}
         </Reveal>
-      </StickySection>
+      </AnimatedSection>
 
-      <StickySection id="contact" className="contact-section" zIndex={70}>
+      <AnimatedSection id="contact" className="section-pad contact-section">
         <Reveal as="div" className="section-label"><span>06</span><h2>Let’s talk</h2></Reveal>
         <Reveal as="div" className="contact-grid" delay={0.08}>
           <div>
@@ -205,17 +208,15 @@ function App() {
             </div>
           </form>
         </Reveal>
-
-        {/* Footer moved inside the last sticky section so it scrolls up naturally at the end */}
-        <footer className="mt-auto w-full pt-16 border-t border-white/5 opacity-80 pb-6 flex justify-between text-xs px-8">
-          <span><span className="green">&gt;_</span> built with curiosity</span>
-          <span>© 2026 Harshavardhan Porika</span>
-          <a className="footer-gh flex items-center gap-2 hover:text-[#00FF66] transition-colors" data-testid="footer-github-link" href="https://github.com/Harsha-0252" target="_blank" rel="noreferrer"><Github size={13}/> Harsha-0252</a>
-          <span className="flex items-center gap-1"><Zap size={13} className="green"/> open to opportunities</span>
-        </footer>
-      </StickySection>
+      </AnimatedSection>
     </main>
     <ChatBot />
+    <footer>
+      <span><span className="green">&gt;_</span> built with curiosity</span>
+      <span>© 2026 Harshavardhan Porika</span>
+      <a className="footer-gh" data-testid="footer-github-link" href="https://github.com/Harsha-0252" target="_blank" rel="noreferrer"><Github size={13}/> Harsha-0252</a>
+      <span><Zap size={13} className="green"/> open to opportunities</span>
+    </footer>
   </div>;
 }
 
