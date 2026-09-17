@@ -27,12 +27,12 @@ export default function ChatBot() {
         if (e) e.preventDefault();
         const text = (directText || input).trim();
         if (!text || sending) return;
-
+        
         const next = [...messages, { role: "user", text }];
         setMessages(next);
         setInput("");
         setSending(true);
-
+        
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/chat`, {
                 method: "POST",
@@ -60,7 +60,7 @@ export default function ChatBot() {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 10, scale: 0.9 }}
-                        className="absolute right-[5rem] bg-[#1E293B] text-[#E2E8F0] border border-[#334155] px-4 py-2.5 rounded-2xl whitespace-nowrap shadow-xl text-sm font-medium flex items-center gap-2 pointer-events-none"
+                        className="absolute right-[5.5rem] bg-[#1E293B] text-[#E2E8F0] border border-[#334155] px-4 py-2.5 rounded-2xl whitespace-nowrap shadow-xl text-sm font-medium flex items-center gap-2 pointer-events-none"
                     >
                         <Sparkles size={16} className="text-[#00FF66]" />
                         Yoo! I'm Zoro! Want some tea on Harsha? Ask me.
@@ -68,23 +68,23 @@ export default function ChatBot() {
                 )}
             </AnimatePresence>
 
-            {/* Avatar Container with Siri-style Outer Glow */}
+            {/* Avatar Container with Neon Glowing Border and Outer Pulse */}
             <div className="relative">
-                {/* Outer Glow Pulse (Visible only when closed) */}
+                {/* Deep Outer Glow Pulse (Visible only when closed) */}
                 {!open && (
-                    <div className="absolute -inset-2 rounded-full bg-[#00FF66] opacity-30 blur-xl animate-pulse pointer-events-none z-0" />
+                    <div className="absolute -inset-3 rounded-full bg-[#00FF66] opacity-30 blur-2xl animate-pulse pointer-events-none z-0" />
                 )}
 
                 <motion.button
-                    className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl overflow-hidden transition-all duration-300 border-2 ${open ? 'bg-[#0B0F17] border-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.4)]' : 'border-transparent bg-[#0B0F17]'}`}
+                    className="relative z-10 w-14 h-14 rounded-full flex items-center justify-center overflow-hidden transition-all duration-300 border-2 border-[#00FF66] bg-[#0B0F17] shadow-[0_0_15px_rgba(0,255,102,0.6)]"
                     data-testid="chatbot-toggle-button"
                     onClick={() => setOpen((v) => !v)}
-                    whileHover={{ scale: 1.06 }}
+                    whileHover={{ scale: 1.06, boxShadow: "0 0 25px rgba(0,255,102,0.9)" }}
                     whileTap={{ scale: 0.95 }}
                     aria-label={open ? "Close chat" : "Ask Zoro about Harsha"}
                 >
                     {open ? (
-                        <X size={24} className="text-[#00FF66]" />
+                        <X size={24} className="text-[#00FF66]" /> 
                     ) : (
                         <img src={zoroAvatar} alt="" className="w-full h-full object-cover rounded-full" />
                     )}
@@ -119,7 +119,7 @@ export default function ChatBot() {
                                     </div>
                                 </div>
                             ))}
-
+                            
                             {messages.length === 1 && (
                                 <div className="pt-2">
                                     <p className="text-xs text-[#94A3B8] mb-3 uppercase tracking-wider font-semibold">Try Asking</p>
@@ -151,11 +151,11 @@ export default function ChatBot() {
                                 placeholder="Ask about Harsha's work..."
                                 aria-label="Ask a question"
                             />
-                            <button
+                            <button 
                                 className="w-10 h-10 rounded-xl bg-[#1E293B] text-white flex items-center justify-center hover:bg-[#00FF66] hover:text-black transition-colors disabled:opacity-50 disabled:hover:bg-[#1E293B] disabled:hover:text-white"
-                                type="submit"
-                                data-testid="chatbot-send-button"
-                                disabled={sending || !input.trim()}
+                                type="submit" 
+                                data-testid="chatbot-send-button" 
+                                disabled={sending || !input.trim()} 
                                 aria-label="Send"
                             >
                                 <Send size={16} />
