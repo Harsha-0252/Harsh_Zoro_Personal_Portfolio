@@ -30,7 +30,8 @@ resend.api_key = RESEND_API_KEY
 
 # Groq (OpenAI-compatible, free tier) client for the portfolio chatbot
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
-GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.1-70b-versatile')
+# Updated to a stable, active model
+GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama3-8b-8192')
 
 groq_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1") if GROQ_API_KEY else None
 
@@ -42,7 +43,7 @@ api_router = APIRouter(prefix="/api")
 
 # Define Models
 class StatusCheck(BaseModel):
-    model_config = ConfigDict(extra="ignore")  # Ignore MongoDB's _id field
+    model_config = ConfigDict(extra="ignore")
     id: str = Field(default_factory=lambda: str(uuid.uuid4()))
     client_name: str
     timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
@@ -114,7 +115,6 @@ async def chat(request: ChatRequest):
 async def create_status_check(input: StatusCheckCreate):
     status_dict = input.model_dump()
     status_obj = StatusCheck(**status_dict)
-    # Convert to dict and serialize datetime to ISO string for MongoDB
     doc = status_obj.model_dump()
     doc['timestamp'] = doc['timestamp'].isoformat()
     _ = await db.status_checks.insert_one(doc)
@@ -122,15 +122,12 @@ async def create_status_check(input: StatusCheckCreate):
 
 @api_router.get("/status", response_model=List[StatusCheck])
 async def get_status_checks():
-    # Exclude MongoDB's _id field from the query results
     status_checks = await db.status_checks.find({}, {"_id": 0}).to_list(1000)
-    # Convert ISO string timestamps back to datetime objects
     for check in status_checks:
         if isinstance(check['timestamp'], str):
             check['timestamp'] = datetime.fromisoformat(check['timestamp'])
     return status_checks
 
-# Include the router in the main app
 app.include_router(api_router)
 
 app.add_middleware(
@@ -141,7 +138,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Configure logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'

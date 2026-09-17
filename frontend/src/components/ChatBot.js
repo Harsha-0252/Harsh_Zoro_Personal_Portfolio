@@ -60,24 +60,27 @@ export default function ChatBot() {
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ opacity: 1, x: 0 }}
                         exit={{ opacity: 0, x: 10, scale: 0.9 }}
-                        className="absolute right-[120%] bg-[#131C2D] text-[#E2E8F0] border border-[#1E293B] px-4 py-3 rounded-2xl whitespace-nowrap shadow-xl text-sm font-medium flex items-center gap-2 pointer-events-none"
+                        className="absolute right-[4.5rem] bg-[#1E293B] text-[#E2E8F0] border border-[#334155] px-4 py-2.5 rounded-2xl whitespace-nowrap shadow-xl text-sm font-medium flex items-center gap-2 pointer-events-none"
                     >
                         <Sparkles size={16} className="text-[#00FF66]" />
-                        Yoo! I'm Zoro! Want the tea on Harsha? Ask me.
+                        Yoo! I'm Zoro! Want some tea on Harsha? Ask me.
                     </motion.div>
                 )}
             </AnimatePresence>
 
             <motion.button
-                className="chat-fab relative z-10 w-14 h-14 bg-[#0B0F17] border border-[#1E293B] rounded-full flex items-center justify-center shadow-2xl overflow-hidden"
+                className={`relative z-10 w-14 h-14 rounded-full flex items-center justify-center shadow-2xl overflow-hidden transition-all duration-300 border-2 ${open ? 'bg-[#0B0F17] border-[#00FF66] shadow-[0_0_20px_rgba(0,255,102,0.4)]' : 'border-transparent bg-transparent'}`}
                 data-testid="chatbot-toggle-button"
                 onClick={() => setOpen((v) => !v)}
                 whileHover={{ scale: 1.06 }}
                 whileTap={{ scale: 0.95 }}
                 aria-label={open ? "Close chat" : "Ask Zoro about Harsha"}
             >
-                <span className="chat-fab-ring absolute inset-0 rounded-full border border-[#00FF66] opacity-30 animate-ping" />
-                {open ? <X size={24} className="text-white" /> : <img src={zoroAvatar} alt="" className="w-full h-full object-cover" />}
+                {open ? (
+                    <X size={24} className="text-[#00FF66]" />
+                ) : (
+                    <img src={zoroAvatar} alt="" className="w-full h-full object-cover rounded-full" />
+                )}
             </motion.button>
 
             <AnimatePresence>
@@ -90,7 +93,6 @@ export default function ChatBot() {
                         exit={{ opacity: 0, y: 24, scale: 0.96 }}
                         transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
                     >
-                        {/* Header */}
                         <div className="flex justify-between items-center bg-[#0B0F17] p-4 border-b border-[#1E293B]">
                             <div>
                                 <h3 className="text-sm font-semibold text-[#E2E8F0]">Zoro Assistant</h3>
@@ -101,7 +103,6 @@ export default function ChatBot() {
                             </button>
                         </div>
 
-                        {/* Chat Messages */}
                         <div className="flex-1 overflow-y-auto p-4 space-y-4" ref={scrollRef} data-testid="chatbot-messages">
                             {messages.map((m, i) => (
                                 <div key={i} className={`flex ${m.role === "user" ? "justify-end" : "justify-start"}`}>
@@ -111,7 +112,6 @@ export default function ChatBot() {
                                 </div>
                             ))}
 
-                            {/* Suggestions Block */}
                             {messages.length === 1 && (
                                 <div className="pt-2">
                                     <p className="text-xs text-[#94A3B8] mb-3 uppercase tracking-wider font-semibold">Try Asking</p>
@@ -134,7 +134,6 @@ export default function ChatBot() {
                             )}
                         </div>
 
-                        {/* Input Area */}
                         <form className="p-3 bg-[#0B0F17] border-t border-[#1E293B] flex items-center gap-2" onSubmit={(e) => send(e)}>
                             <input
                                 className="flex-1 bg-transparent border border-[#1E293B] rounded-xl px-4 py-2.5 text-sm text-white placeholder-[#94A3B8] focus:outline-none focus:border-[#00FF66] transition-colors"

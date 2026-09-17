@@ -6,13 +6,30 @@ import LogStream from "@/components/LogStream";
 import ProjectsIDE from "@/components/ProjectsIDE";
 import MatrixRain from "@/components/MatrixRain";
 import Reveal, { RevealItem } from "@/components/Reveal";
-import ScrollReveal from "@/components/ScrollReveal";
 import ChatBot from "@/components/ChatBot";
 import ScrollProgress from "@/components/ScrollProgress";
 import "@/App.css";
 import { ArrowUpRight, ChevronDown, Download, ExternalLink, Github, Mail, Moon, Send, Sun, Zap } from "lucide-react";
 
 const fadeUp = { hidden: { opacity: 0, y: 26 }, show: (i) => ({ opacity: 1, y: 0, transition: { delay: 0.25 + i * 0.14, duration: 0.65, ease: [0.22, 1, 0.36, 1] } }) };
+
+// --- Parallax Wrapper ---
+const StickySection = ({ children, id, className = "", zIndex }) => (
+    <section
+        id={id}
+        className={`section-pad ${className}`}
+        style={{
+          position: "sticky",
+          top: 0,
+          zIndex: zIndex,
+          minHeight: "100vh",
+          backgroundColor: "inherit",
+          boxShadow: "0 -15px 40px rgba(0,0,0,0.4)"
+        }}
+    >
+      {children}
+    </section>
+);
 
 const roles = ["Software Engineer", "Java & Spring Boot Developer", "AI/ML Enthusiast"];
 const projects = [
@@ -44,13 +61,13 @@ function App() {
 
   if (!booted) return <div className="boot-screen"><div className="boot-lines"><p><span>root@harsha-dev</span>:~$ ./initialize_portfolio</p><p className="dim">Loading modules... [OK]</p><p className="dim">Mounting experience... [OK]</p><p className="green">Welcome, recruiter.</p><p className="boot-name">Harshavardhan Porika<span className="cursor-block">▋</span></p><p className="dim">Software Engineer</p></div><button className="skip-boot" data-testid="skip-boot-button" onClick={() => setBooted(true)}>skip boot ↵</button></div>;
 
-  return <div className={light ? "app light" : "app"}>
+  return <div className={light ? "app light" : "app"} style={{ position: "relative" }}>
     <ScrollProgress />
     {matrix && <MatrixRain onClose={() => setMatrix(false)} />}
     <header className="topbar"><a className="brand" href="#home" data-testid="brand-home"><span className="brand-mark">&gt;_</span><span>harsha<span className="green">.dev</span></span></a><nav className="tabs" aria-label="Main navigation">{[["home","01 / home"],["experience","02 / experience"],["projects","03 / projects"],["skills","04 / skills"],["contact","05 / contact"]].map(([id,label]) => <button key={id} data-testid={`nav-${id}-button`} onClick={() => go(id)}>{label}</button>)}</nav><button className="theme-toggle" data-testid="theme-toggle-button" onClick={() => setLight(!light)} aria-label="Toggle light mode">{light ? <Moon size={16}/> : <Sun size={16}/>}<span>{light ? "dark" : "light"}</span></button></header>
 
     <main>
-      <section id="home" className="hero section-pad">
+      <StickySection id="home" zIndex={10}>
         <div className="hero-glow" aria-hidden="true" />
         <motion.div className="hero-copy" initial="hidden" animate="show">
           <motion.p className="eyebrow" custom={0} variants={fadeUp}><span className="green">$</span> whoami <span className="muted">// available for software engineer roles</span></motion.p>
@@ -71,144 +88,134 @@ function App() {
           </div>
         </motion.div>
         <div className="scroll-cue">scroll to explore <ChevronDown size={14}/></div>
-      </section>
+      </StickySection>
 
-      <ScrollReveal>
-        <section id="about" className="section-pad split-section">
-          <LogStream />
-          <Reveal as="div" className="section-label"><span>01</span><h2>About me</h2></Reveal>
-          <Reveal as="div" className="about-grid" delay={0.08}>
-            <div>
-              <p className="lead">I like solving the failures that happen after the happy path.</p>
-              <p className="body-copy">I’m a Computer Science graduate at Neil Gogte Institute of Technology, with one year inside production-level enterprise software at Ivanti. My work sits where backend engineering, network behavior, and customer impact meet.</p>
-              <p className="body-copy">Currently looking for an Associate Software Engineer role where I can ship reliable systems and keep learning in public.</p>
+      <StickySection id="about" className="split-section" zIndex={20}>
+        <LogStream />
+        <Reveal as="div" className="section-label"><span>01</span><h2>About me</h2></Reveal>
+        <Reveal as="div" className="about-grid" delay={0.08}>
+          <div>
+            <p className="lead">I like solving the failures that happen after the happy path.</p>
+            <p className="body-copy">I’m a Computer Science graduate at Neil Gogte Institute of Technology, with one year inside production-level enterprise software at Ivanti. My work sits where backend engineering, network behavior, and customer impact meet.</p>
+            <p className="body-copy">Currently looking for an Associate Software Engineer role where I can ship reliable systems and keep learning in public.</p>
+          </div>
+          <Tilt className="terminal-card glass" data-testid="whoami-card">
+            <div className="window-bar"><span></span><span></span><span></span><b>whoami.sh</b></div>
+            <div className="terminal-content">
+              <p className="muted">$ cat ./profile.json</p>
+              <p>&#123;</p>
+              <p>&nbsp;&nbsp;<span className="cyan">"name"</span>: <span className="green">"Harshavardhan Porika"</span>,</p>
+              <p>&nbsp;&nbsp;<span className="cyan">"role"</span>: <span className="green">"Software Engineer"</span>,</p>
+              <p>&nbsp;&nbsp;<span className="cyan">"college"</span>: <span className="green">"NGIT"</span>,</p>
+              <p>&nbsp;&nbsp;<span className="cyan">"gpa"</span>: <span className="amber">8.7</span>,</p>
+              <p>&nbsp;&nbsp;<span className="cyan">"grad"</span>: <span className="amber">2026</span></p>
+              <p>&#125;</p>
             </div>
-            <Tilt className="terminal-card glass" data-testid="whoami-card">
-              <div className="window-bar"><span></span><span></span><span></span><b>whoami.sh</b></div>
-              <div className="terminal-content">
-                <p className="muted">$ cat ./profile.json</p>
-                <p>&#123;</p>
-                <p>&nbsp;&nbsp;<span className="cyan">"name"</span>: <span className="green">"Harshavardhan Porika"</span>,</p>
-                <p>&nbsp;&nbsp;<span className="cyan">"role"</span>: <span className="green">"Software Engineer"</span>,</p>
-                <p>&nbsp;&nbsp;<span className="cyan">"college"</span>: <span className="green">"NGIT"</span>,</p>
-                <p>&nbsp;&nbsp;<span className="cyan">"gpa"</span>: <span className="amber">8.7</span>,</p>
-                <p>&nbsp;&nbsp;<span className="cyan">"grad"</span>: <span className="amber">2026</span></p>
-                <p>&#125;</p>
-              </div>
-            </Tilt>
-          </Reveal>
-        </section>
-      </ScrollReveal>
-
-      <ScrollReveal>
-        <section id="experience" className="section-pad">
-          <LogStream />
-          <Reveal as="div" className="section-label"><span>02</span><h2>Experience</h2></Reveal>
-          <Tilt className="experience-card glass" max={3} data-testid="experience-card">
-            <div className="exp-heading">
-              <div>
-                <p className="green mono">commit 8f4a2c1 <span className="muted">(HEAD → production)</span></p>
-                <h3>Software Engineering Intern <span>@ Ivanti</span></h3>
-                <p className="muted">Aug 2025 — July 2026 · Enterprise MDM / UEM · EPMM</p>
-              </div>
-              <span className="tag">1 year / shipped</span>
-            </div>
-            <Reveal as="div" className="commit-list" stagger delay={0.05}>
-              {["Reduced engineering bug backlog by 28% by resolving 50+ customer-facing production defects through Java debugging and deep log analysis.",
-                "Deployed 10+ critical OWASP-aligned hotfixes and backported vulnerability patches as RPM packages outside sprint cycles.",
-                "Optimized Java batch processing to unblock iOS device associations for global enterprise client F. Hoffmann-La Roche AG.",
-                "Resolved 40+ Sev-1/2/3 incidents for BlackRock and Morgan Stanley using SQL-driven analysis across distributed infrastructure.",
-                "Fixed Microsoft Graph API regressions, restoring managed-app visibility and automated policy sync across iOS and Android.",
-                "Designed an efficient LDM with Python, PyTorch and VAE compression, improving prompt guidance by 46.8% and cutting compute 48x."].map((item, i) =>
-                  <RevealItem className="commit" key={item}>
-                    <span className="commit-hash">{["a1d9e40","c22bf81","e03cc9a","f1142ad","b5e6d0c","8f4a2c1"][i]}</span>
-                    <p>{item}</p>
-                    <span className="blame">{["Sep 25","Oct 25","Nov 25","Jan 26","Mar 26","Jun 26"][i]}</span>
-                  </RevealItem>
-              )}
-            </Reveal>
           </Tilt>
-        </section>
-      </ScrollReveal>
+        </Reveal>
+      </StickySection>
 
-      <ScrollReveal>
-        <section id="projects" className="section-pad">
-          <Reveal as="div" className="section-label"><span>03</span><h2>Selected projects</h2></Reveal>
-          <Reveal delay={0.1}><ProjectsIDE projects={projects} /></Reveal>
-        </section>
-      </ScrollReveal>
-
-      <ScrollReveal>
-        <section id="skills" className="section-pad">
-          <Reveal as="div" className="section-label"><span>04</span><h2>Skills</h2></Reveal>
-          <Reveal as="div" className="skills-grid" stagger>
-            {Object.entries(skills).map(([category, items]) =>
-                <RevealItem className="skill-group" key={category}>
-                  <p className="group-title"><span className="cyan">"{category}"</span>: [</p>
-                  {items.map((item, j) =>
-                      <motion.span className="skill-tag" data-testid={`skill-${item.toLowerCase().replaceAll(" ", "-")}`} key={item} animate={reduceMotion ? {} : { y: [0, -5, 0] }} transition={{ duration: 3.4 + (j % 3) * 0.8, repeat: Infinity, ease: "easeInOut", delay: j * 0.25 }} whileHover={{ scale: 1.06, color: "#00ff66" }}>"{item}"</motion.span>
-                  )}
-                  <p className="group-title">]</p>
-                </RevealItem>
-            )}
-          </Reveal>
-        </section>
-      </ScrollReveal>
-
-      <ScrollReveal>
-        <section className="section-pad">
-          <Reveal as="div" className="section-label"><span>05</span><h2>Certifications</h2></Reveal>
-          <Reveal as="div" className="cert-grid" stagger>
-            {certs.map(([issuer, name, url], i) =>
-                <RevealItem key={name}>
-                  <a className="cert" data-testid={`certification-${i}-link`} href={url} target="_blank" rel="noreferrer">
-                    <span className="cert-icon">✓</span>
-                    <span><b>{issuer}</b><small>{name}</small></span>
-                    <ExternalLink size={14}/>
-                  </a>
-                </RevealItem>
-            )}
-          </Reveal>
-        </section>
-      </ScrollReveal>
-
-      <ScrollReveal>
-        <section id="contact" className="section-pad contact-section">
-          <Reveal as="div" className="section-label"><span>06</span><h2>Let’s talk</h2></Reveal>
-          <Reveal as="div" className="contact-grid" delay={0.08}>
+      <StickySection id="experience" zIndex={30}>
+        <LogStream />
+        <Reveal as="div" className="section-label"><span>02</span><h2>Experience</h2></Reveal>
+        <Tilt className="experience-card glass" max={3} data-testid="experience-card">
+          <div className="exp-heading">
             <div>
-              <p className="lead">Have a software engineering problem worth solving?</p>
-              <p className="body-copy">I’m open to conversations about software engineering roles, production systems, and thoughtful AI/ML applications.</p>
-              <div className="direct-links">
-                <a data-testid="email-link" href="mailto:porikaharsha1427@gmail.com"><Mail size={16}/> porikaharsha1427@gmail.com</a>
-                <a data-testid="linkedin-link" href="https://linkedin.com/in/harsha0252" target="_blank" rel="noreferrer"><ExternalLink size={16}/> linkedin.com/in/harsha0252</a>
-                <a data-testid="github-link" href="https://github.com/Harsha-0252" target="_blank" rel="noreferrer"><Github size={16}/> github.com/Harsha-0252</a>
-              </div>
+              <p className="green mono">commit 8f4a2c1 <span className="muted">(HEAD → production)</span></p>
+              <h3>Software Engineering Intern <span>@ Ivanti</span></h3>
+              <p className="muted">Aug 2025 — July 2026 · Enterprise MDM / UEM · EPMM</p>
             </div>
-            <form className="contact-terminal" data-testid="contact-form" onSubmit={submit}>
-              <div className="window-bar"><span></span><span></span><span></span><b>contact — bash</b></div>
-              <div className="form-body">
-                <label htmlFor="name"><span className="green">$</span> enter your name_</label>
-                <input id="name" data-testid="contact-name-input" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" required/>
-                <label htmlFor="email"><span className="green">$</span> enter your email_</label>
-                <input id="email" type="email" data-testid="contact-email-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required/>
-                <label htmlFor="message"><span className="green">$</span> enter your message_</label>
-                <textarea id="message" data-testid="contact-message-input" value={message} onChange={e => { if (e.target.value.toLowerCase().includes("sudo")) { setMatrix(true); setMessage(""); } else setMessage(e.target.value); }} placeholder="Type 'sudo' for a surprise..." required></textarea>
-                <button className="primary-btn" data-testid="contact-submit-button" type="submit" disabled={sending}><Send size={15}/> {sending ? "sending..." : "execute send"}</button>
-                {sent && <p className="form-result" data-testid="contact-success-message">{sent}</p>}
-              </div>
-            </form>
+            <span className="tag">1 year / shipped</span>
+          </div>
+          <Reveal as="div" className="commit-list" stagger delay={0.05}>
+            {["Reduced engineering bug backlog by 28% by resolving 50+ customer-facing production defects through Java debugging and deep log analysis.",
+              "Deployed 10+ critical OWASP-aligned hotfixes and backported vulnerability patches as RPM packages outside sprint cycles.",
+              "Optimized Java batch processing to unblock iOS device associations for global enterprise client F. Hoffmann-La Roche AG.",
+              "Resolved 40+ Sev-1/2/3 incidents for BlackRock and Morgan Stanley using SQL-driven analysis across distributed infrastructure.",
+              "Fixed Microsoft Graph API regressions, restoring managed-app visibility and automated policy sync across iOS and Android.",
+              "Designed an efficient LDM with Python, PyTorch and VAE compression, improving prompt guidance by 46.8% and cutting compute 48x."].map((item, i) =>
+                <RevealItem className="commit" key={item}>
+                  <span className="commit-hash">{["a1d9e40","c22bf81","e03cc9a","f1142ad","b5e6d0c","8f4a2c1"][i]}</span>
+                  <p>{item}</p>
+                  <span className="blame">{["Sep 25","Oct 25","Nov 25","Jan 26","Mar 26","Jun 26"][i]}</span>
+                </RevealItem>
+            )}
           </Reveal>
-        </section>
-      </ScrollReveal>
+        </Tilt>
+      </StickySection>
+
+      <StickySection id="projects" zIndex={40}>
+        <Reveal as="div" className="section-label"><span>03</span><h2>Selected projects</h2></Reveal>
+        <Reveal delay={0.1}><ProjectsIDE projects={projects} /></Reveal>
+      </StickySection>
+
+      <StickySection id="skills" zIndex={50}>
+        <Reveal as="div" className="section-label"><span>04</span><h2>Skills</h2></Reveal>
+        <Reveal as="div" className="skills-grid" stagger>
+          {Object.entries(skills).map(([category, items]) =>
+              <RevealItem className="skill-group" key={category}>
+                <p className="group-title"><span className="cyan">"{category}"</span>: [</p>
+                {items.map((item, j) =>
+                    <motion.span className="skill-tag" data-testid={`skill-${item.toLowerCase().replaceAll(" ", "-")}`} key={item} animate={reduceMotion ? {} : { y: [0, -5, 0] }} transition={{ duration: 3.4 + (j % 3) * 0.8, repeat: Infinity, ease: "easeInOut", delay: j * 0.25 }} whileHover={{ scale: 1.06, color: "#00ff66" }}>"{item}"</motion.span>
+                )}
+                <p className="group-title">]</p>
+              </RevealItem>
+          )}
+        </Reveal>
+      </StickySection>
+
+      <StickySection zIndex={60}>
+        <Reveal as="div" className="section-label"><span>05</span><h2>Certifications</h2></Reveal>
+        <Reveal as="div" className="cert-grid" stagger>
+          {certs.map(([issuer, name, url], i) =>
+              <RevealItem key={name}>
+                <a className="cert" data-testid={`certification-${i}-link`} href={url} target="_blank" rel="noreferrer">
+                  <span className="cert-icon">✓</span>
+                  <span><b>{issuer}</b><small>{name}</small></span>
+                  <ExternalLink size={14}/>
+                </a>
+              </RevealItem>
+          )}
+        </Reveal>
+      </StickySection>
+
+      <StickySection id="contact" className="contact-section" zIndex={70}>
+        <Reveal as="div" className="section-label"><span>06</span><h2>Let’s talk</h2></Reveal>
+        <Reveal as="div" className="contact-grid" delay={0.08}>
+          <div>
+            <p className="lead">Have a software engineering problem worth solving?</p>
+            <p className="body-copy">I’m open to conversations about software engineering roles, production systems, and thoughtful AI/ML applications.</p>
+            <div className="direct-links">
+              <a data-testid="email-link" href="mailto:porikaharsha1427@gmail.com"><Mail size={16}/> porikaharsha1427@gmail.com</a>
+              <a data-testid="linkedin-link" href="https://linkedin.com/in/harsha0252" target="_blank" rel="noreferrer"><ExternalLink size={16}/> linkedin.com/in/harsha0252</a>
+              <a data-testid="github-link" href="https://github.com/Harsha-0252" target="_blank" rel="noreferrer"><Github size={16}/> github.com/Harsha-0252</a>
+            </div>
+          </div>
+          <form className="contact-terminal" data-testid="contact-form" onSubmit={submit}>
+            <div className="window-bar"><span></span><span></span><span></span><b>contact — bash</b></div>
+            <div className="form-body">
+              <label htmlFor="name"><span className="green">$</span> enter your name_</label>
+              <input id="name" data-testid="contact-name-input" value={name} onChange={e => setName(e.target.value)} placeholder="Your name" required/>
+              <label htmlFor="email"><span className="green">$</span> enter your email_</label>
+              <input id="email" type="email" data-testid="contact-email-input" value={email} onChange={e => setEmail(e.target.value)} placeholder="you@example.com" required/>
+              <label htmlFor="message"><span className="green">$</span> enter your message_</label>
+              <textarea id="message" data-testid="contact-message-input" value={message} onChange={e => { if (e.target.value.toLowerCase().includes("sudo")) { setMatrix(true); setMessage(""); } else setMessage(e.target.value); }} placeholder="Type 'sudo' for a surprise..." required></textarea>
+              <button className="primary-btn" data-testid="contact-submit-button" type="submit" disabled={sending}><Send size={15}/> {sending ? "sending..." : "execute send"}</button>
+              {sent && <p className="form-result" data-testid="contact-success-message">{sent}</p>}
+            </div>
+          </form>
+        </Reveal>
+
+        {/* Footer moved inside the last sticky section so it scrolls up naturally at the end */}
+        <footer className="mt-auto w-full pt-16 border-t border-white/5 opacity-80 pb-6 flex justify-between text-xs px-8">
+          <span><span className="green">&gt;_</span> built with curiosity</span>
+          <span>© 2026 Harshavardhan Porika</span>
+          <a className="footer-gh flex items-center gap-2 hover:text-[#00FF66] transition-colors" data-testid="footer-github-link" href="https://github.com/Harsha-0252" target="_blank" rel="noreferrer"><Github size={13}/> Harsha-0252</a>
+          <span className="flex items-center gap-1"><Zap size={13} className="green"/> open to opportunities</span>
+        </footer>
+      </StickySection>
     </main>
     <ChatBot />
-    <footer>
-      <span><span className="green">&gt;_</span> built with curiosity</span>
-      <span>© 2026 Harshavardhan Porika</span>
-      <a className="footer-gh" data-testid="footer-github-link" href="https://github.com/Harsha-0252" target="_blank" rel="noreferrer"><Github size={13}/> Harsha-0252</a>
-      <span><Zap size={13} className="green"/> open to opportunities</span>
-    </footer>
   </div>;
 }
 
