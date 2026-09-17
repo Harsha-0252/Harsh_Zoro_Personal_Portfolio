@@ -67,7 +67,7 @@ function App() {
         </div>
     )}
 
-    <header className="topbar"><a className="brand" href="#home" data-testid="brand-home"><span className="brand-mark">&gt;_</span><span>harsha<span className="green">.dev</span></span></a><nav className="tabs" aria-label="Main navigation">{[["home","01 / home"],["experience","02 / experience"],["projects","03 / projects"],["skills","04 / skills"],["contact","05 / contact"]].map(([id,label]) => <button key={id} data-testid={`nav-${id}-button`} onClick={() => go(id)}>{label}</button>)}</nav><button className="theme-toggle" data-testid="theme-toggle-button" onClick={() => setLight(!light)} aria-label="Toggle light mode">{light ? <Moon size={16}/> : <Sun size={16}/>}<span>{light ? "dark" : "light"}</span></button></header>
+    <header className="topbar"><a className="brand" href="#home" data-testid="brand-home"><span className="brand-mark">&gt;_</span><span>harsha<span className="green">.dev</span></span></a><nav className="tabs" aria-label="Main navigation">{[["home","01 / Home"],["experience","02 / Experience"],["projects","03 / Projects"],["skills","04 / Skills"],["contact","05 / Contact"]].map(([id,label]) => <button key={id} data-testid={`nav-${id}-button`} onClick={() => go(id)}>{label}</button>)}</nav><button className="theme-toggle" data-testid="theme-toggle-button" onClick={() => setLight(!light)} aria-label="Toggle light mode">{light ? <Moon size={16}/> : <Sun size={16}/>}<span>{light ? "dark" : "light"}</span></button></header>
 
     <main>
       <section id="home" className="hero section-pad">
