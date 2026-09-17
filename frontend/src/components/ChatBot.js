@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { MessageSquare, Send, X } from "lucide-react";
+import { Send, X } from "lucide-react";
+import zoroAvatar from "@/assets/zoro-avatar.png";
 
 const GREETING = { role: "bot", text: "$ whoami --ask\nHey, I'm Zoro — Harsha's portfolio bot. Ask me about his experience, projects, or skills." };
 
@@ -53,7 +54,8 @@ export default function ChatBot() {
                 whileTap={{ scale: 0.95 }}
                 aria-label={open ? "Close chat" : "Ask Zoro about Harsha"}
             >
-                {open ? <X size={20} /> : <MessageSquare size={20} />}
+                <span className="chat-fab-ring" />
+                {open ? <X size={20} /> : <img src={zoroAvatar} alt="" className="chat-fab-avatar" />}
             </motion.button>
 
             <AnimatePresence>
@@ -70,11 +72,11 @@ export default function ChatBot() {
                         <div className="chat-messages" ref={scrollRef} data-testid="chatbot-messages">
                             {messages.map((m, i) => (
                                 <div key={i} className={`chat-msg ${m.role}`}>
-                                    {m.role === "bot" && <span className="chat-prompt">$</span>}
+                                    {m.role === "bot" && <img src={zoroAvatar} alt="" className="chat-avatar" />}
                                     <p>{m.text}</p>
                                 </div>
                             ))}
-                            {sending && <div className="chat-msg bot"><span className="chat-prompt">$</span><p className="chat-typing">thinking<span>.</span><span>.</span><span>.</span></p></div>}
+                            {sending && <div className="chat-msg bot"><img src={zoroAvatar} alt="" className="chat-avatar" /><p className="chat-typing">thinking<span>.</span><span>.</span><span>.</span></p></div>}
                         </div>
                         <form className="chat-input-row" onSubmit={send}>
                             <input
