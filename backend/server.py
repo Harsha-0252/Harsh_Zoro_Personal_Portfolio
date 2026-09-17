@@ -28,8 +28,7 @@ CONTACT_EMAIL = os.environ.get('CONTACT_EMAIL')
 resend.api_key = RESEND_API_KEY
 
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
-# Swapped to Groq's active, stable model
-GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.1-8b-instant')
+GROQ_MODEL = os.environ.get('GROQ_MODEL', 'llama-3.3-70b-versatile')
 
 groq_client = OpenAI(api_key=GROQ_API_KEY, base_url="https://api.groq.com/openai/v1") if GROQ_API_KEY else None
 
@@ -92,13 +91,24 @@ async def chat(request: ChatRequest):
     messages.append({"role": "user", "content": request.message})
 
     try:
-        completion = await asyncio.to_thread(
-            groq_client.chat.completions.create,
-            model=GROQ_MODEL,
-            messages=messages,
-            max_tokens=400,
-            temperature=0.4,
-        )
+        try:
+            completion = await asyncio.to_thread(
+                groq_client.chat.completions.create,
+                model=GROQ_MODEL,
+                messages=messages,
+                max_tokens=400,
+                temperature=0.4,
+            )
+        except Exception:
+            # Fallback if the primary model gets renamed/decommissioned by Groq
+            logger.warning(f"Primary model '{GROQ_MODEL}' failed, retrying with fallback model")
+            completion = await asyncio.to_thread(
+                groq_client.chat.completions.create,
+                model="llama-3.1-8b-instant",
+                messages=messages,
+                max_tokens=400,
+                temperature=0.4,
+            )
         reply = completion.choices[0].message.content
         return {"reply": reply}
     except Exception as exc:
